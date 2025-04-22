@@ -2,6 +2,7 @@
 #include <ncurses.h>
 #include <unistd.h>   // usleep
 #include <random>
+#include <algorithm>
 
 constexpr int GRID_HEIGHT = 20;
 constexpr int GRID_WIDTH = 40;
@@ -11,6 +12,9 @@ constexpr int GRID_START_X = 2;
 struct Position {
     int y, x;
 };
+bool operator==(const Position& lhs, const Position& rhs) {
+    return lhs.x == rhs.x && lhs.y == rhs.y;
+}
 
 enum Direction {
 	UP,
@@ -35,6 +39,7 @@ public:
 	Direction dir = LEFT;
 	Position food;
 	void get_new_food_pos();
+	bool game_over = false;
 
 	Snake() {
 		// spawn first element of snake
@@ -93,7 +98,12 @@ public:
 
 		new_head = setNewCoordinates(head, dir);
 
-		pos.push_front(new_head);    // Add new head
+		if (std::find(pos.begin(), pos.end(), new_head) != pos.end()) {
+			game_over = true;
+
+		} else {
+			pos.push_front(new_head);    // Add new head
+		}
 		
 		if (!(head.x == food.x && head.y == food.y)) {
 			pos.pop_back();            // Remove tail
@@ -148,7 +158,7 @@ int main() {
 	mvaddstr(0, 0, "Snake Game - Press 'q' to quit");
 	// refresh();
 
-    while (true) {
+    while (!snake.game_over) {
 
 		std::string head_position_text = "Head Position: X=" + std::to_string(snake.pos[0].x) + " Y=" + std::to_string(snake.pos[0].y);
 		std::string food_position_text = "Food Position: X=" + std::to_string(snake.food.x) + " Y=" + std::to_string(snake.food.y);
@@ -184,13 +194,28 @@ int main() {
         mvwaddch(game_win, snake.food.y, snake.food.x, 'X');
         attroff(COLOR_PAIR(2));
 
-
-
         wrefresh(game_win);
 
-        usleep(200000); // 100ms delay
+        usleep(100000); // 100ms delay
 		refresh();
     }
+
+    endwin();
+	    // Game over screen
+    nodelay(stdscr, FALSE); // Wait for key press
+    clear();
+    mvaddstr(GRID_HEIGHT / 2, (GRID_WIDTH / 2) - 5, "Game Over!");
+    mvaddstr((GRID_HEIGHT / 2) + 1, (GRID_WIDTH / 2) - 12, "Press 'q' to quit or 'r' to restart");
+    refresh();
+
+    int ch;
+    while ((ch = getch()) != 'q') {
+        if (ch == 'r') {
+            // Optional: handle restart logic here
+            break;
+        }
+    }
+
 
     endwin();
     return 0;
