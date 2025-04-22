@@ -3,6 +3,7 @@
 #include <unistd.h>   // usleep
 #include <random>
 #include <algorithm>
+#include <format>
 
 #include "snake.hpp"
 #include "agent.hpp"
@@ -37,17 +38,22 @@ int main() {
     //     {10, 10}, {10, 11}, {10, 12}, {10, 13}, {10, 14}
     // };
 	snake.food = {14,14};
+	Agent agent;
 
 	mvaddstr(0, 0, "Snake Game - Press 'q' to quit");
 	// refresh();
 
     while (!snake.game_over) {
+		agent.setFoodState(snake);
 
 		std::string head_position_text = "Head Position: X=" + std::to_string(snake.pos[0].x) + " Y=" + std::to_string(snake.pos[0].y);
 		std::string food_position_text = "Food Position: X=" + std::to_string(snake.food.x) + " Y=" + std::to_string(snake.food.y);
 		erase();
+		std::string food_state_text = "Food Dist d: " + std::format("{:.2f}", agent.states.food_dist) + " Food angle phi: " + std::format("{:.2f}", agent.states.food_angle);
+
 		mvaddstr(1, 2, head_position_text.c_str());
 		mvaddstr(2, 2, food_position_text.c_str());
+		mvaddstr(3, 2, food_state_text.c_str());
         // Check for quit key
         int ch = getch();
         if (ch == 'q') break;
@@ -79,7 +85,7 @@ int main() {
 
         wrefresh(game_win);
 
-        usleep(100000); // 100ms delay
+        usleep(200000); // 100ms delay
 		refresh();
     }
 
