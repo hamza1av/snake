@@ -105,16 +105,16 @@ public:
 	void get_user_input(int ch) {
 		switch (ch) {
 			case KEY_UP:
-			dir = UP;
+			if (dir!= DOWN) dir = UP;
 			break;
 			case KEY_DOWN:
-			dir = DOWN;
+			if (dir!=UP) dir = DOWN;
 			break;
 			case KEY_RIGHT:
-			dir = RIGHT;
+			if (dir!= LEFT) dir = RIGHT;
 			break;
 			case KEY_LEFT:
-			dir = LEFT;
+			if (dir!= RIGHT) dir = LEFT;
 			break;
 			default:
 			break;
