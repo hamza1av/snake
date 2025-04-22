@@ -1,2 +1,5 @@
-g++ main.cpp -o main -lncurses
-./main
+#!/bin/bash
+mkdir -p build
+cd build
+cmake ..
+make
