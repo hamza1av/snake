@@ -23,6 +23,7 @@ public:
     bool game_over = false;
 
     Snake();
+    Snake(Position start_pos, int size);
     void get_user_input(int ch);
     void move();
     void gen_new_food_pos();

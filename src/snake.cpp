@@ -15,7 +15,17 @@ Position get_rand_pos() {
 }
 
 Snake::Snake() {
-    pos.push_back(get_rand_pos());
+    pos.push_back({10, 10});
+    pos.push_back({10, 11});
+    pos.push_back({10, 12});
+    pos.push_back({10, 13});
+    gen_new_food_pos();
+}
+
+Snake::Snake(Position start_pos, int size) {
+    for (int i = 0; i < size; ++i) {
+        pos.push_back({start_pos.y, start_pos.x + i});
+    }
     gen_new_food_pos();
 }
 
