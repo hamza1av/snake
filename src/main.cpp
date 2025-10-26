@@ -10,7 +10,7 @@
 
 constexpr int GRID_HEIGHT = 20;
 constexpr int GRID_WIDTH = 40;
-constexpr int GRID_START_Y = 4;
+constexpr int GRID_START_Y = 5;
 constexpr int GRID_START_X = 2;
 
 
@@ -51,9 +51,12 @@ int main() {
 		erase();
 		std::string food_state_text = "Food Dist d: " + std::format("{:.2f}", agent.states.food_dist) + " Food angle phi: " + std::format("{:.2f}", agent.states.food_angle);
 
+		std::string danger_state_text = "du: " + std::to_string(agent.states.danger_up);
+
 		mvaddstr(1, 2, head_position_text.c_str());
 		mvaddstr(2, 2, food_position_text.c_str());
 		mvaddstr(3, 2, food_state_text.c_str());
+		mvaddstr(4, 2, danger_state_text.c_str());
         // Check for quit key
         int ch = getch();
         if (ch == 'q') break;

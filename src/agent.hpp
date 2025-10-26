@@ -30,17 +30,6 @@ public:
     StateSpace states;
     ActionSpace actions;
 
-    // void setFoodState(const Snake& snake) {
-    //     int diff_x = snake.food.x - snake.pos[0].x;
-    //     int diff_y = snake.food.y - snake.pos[0].y;
-    //
-    //     states.food_dist = std::sqrt(diff_x * diff_x + diff_y * diff_y);
-    //
-    //     float arccos_arg1 = snake.food.x * snake.pos[0].x + snake.food.y * snake.pos[0].y;
-    //     float arccos_arg2 = snake.food.x * snake.pos[0].x * snake.food.y * snake.pos[0].y;
-    //     float sign_fact = signum(snake.food.x * snake.pos[0].y - snake.food.y * snake.pos[0].x);
-    //     states.food_angle = std::acos(arccos_arg1/arccos_arg2) * sign_fact;
-    // }
 	void setFoodState(const Snake& snake) {
 		int diff_x = snake.food.x - snake.pos[0].x;
 		int diff_y = snake.food.y - snake.pos[0].y;
@@ -73,6 +62,38 @@ public:
 
 		states.food_angle = (std::acos(dot) * signum(cross))/std::numbers::pi * 180;
 	}
+
+	void setDangerState(const Snake& snake) {
+		Position rel_pos_head = get_rel_pos_vec(snake);
+		if (rel_pos_head.y == 1 && rel_pos_head.x == 0) {
+			states.danger_up = 1;
+		} else if (rel_pos_head.y == 2 && rel_pos_head.x == 0) {
+			states.danger_up_up = 1;
+		} else if (rel_pos_head.y == 0 && rel_pos_head.x == 1) {
+			states.danger_right = 1;
+		} else if (rel_pos_head.y == 0 && rel_pos_head.x == 2) {
+			states.danger_right_right = 1;
+		} else if (rel_pos_head.y == 0 && rel_pos_head.x == -1) {
+			states.danger_left = 1;
+		} else if (rel_pos_head.y == 0 && rel_pos_head.x == -2) {
+			states.danger_left_left = 1;
+		}
+	}
+
+private:
+	Position get_rel_pos_vec(const Snake& snake) {
+		Position snake_movement_dir;
+		switch (snake.dir) {
+			// UP is normal case, no need for transformation.
+			case UP: snake_movement_dir = {-1, 0}; return {snake.food.y - snake.pos[0].y, snake.food.x - snake.pos[0].x}; break;
+		case DOWN: snake_movement_dir = {1, 0}; return {- (snake.food.y - snake.pos[0].y), -(snake.food.x - snake.pos[0].x)}; break;
+		case RIGHT: snake_movement_dir = {0, 1}; return {-(snake.food.x - snake.pos[0].x), snake.food.y - snake.pos[0].y}; break;
+		case LEFT: snake_movement_dir = {0, -1}; return {snake.food.x - snake.pos[0].x, -(snake.food.y - snake.pos[0].y)};  break;
+			default: break;
+		}
+	
+	}
+
 };
 
 #endif // AGENT_HPP
