@@ -25,6 +25,7 @@ public:
     Snake();
     Snake(Position start_pos, int size);
     void get_user_input(int ch);
+    void get_random_input();
     void move();
     void gen_new_food_pos();
     Position setNewCoordinates(Position head, Direction dir);

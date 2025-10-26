@@ -2,6 +2,7 @@
 #include <random>
 #include <algorithm>
 #include <ncurses.h>
+#include <cstdlib>
 
 constexpr int GRID_HEIGHT = 20;
 constexpr int GRID_WIDTH = 40;
@@ -77,4 +78,15 @@ void Snake::get_user_input(int ch) {
         case KEY_RIGHT: if (dir != LEFT) dir = RIGHT; break;
         case KEY_LEFT:  if (dir != RIGHT) dir = LEFT; break;
     }
+}
+
+void Snake::get_random_input() {
+	int randomNum = rand() % 4 + 1;
+    switch (randomNum) {
+        case 1:    if (dir != DOWN) dir = UP; break;
+        case 2:  if (dir != UP) dir = DOWN; break;
+        case 3: if (dir != LEFT) dir = RIGHT; break;
+        case 4:  if (dir != RIGHT) dir = LEFT; break;
+    }
+	
 }

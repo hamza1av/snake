@@ -61,7 +61,8 @@ int main() {
         int ch = getch();
         if (ch == 'q') break;
 
-		snake.get_user_input(ch);
+		// snake.get_user_input(ch);
+		snake.get_random_input();
 		snake.move();
 
         // clear();
